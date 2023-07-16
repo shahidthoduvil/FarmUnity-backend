@@ -38,7 +38,7 @@ class AccountManger(BaseUserManager):
 
 
 class Category(models.Model):
-    Category_name=models.CharField(max_length=250,unique=True)
+    Category_name=models.CharField(max_length=250,blank=True,null=True)
     class Meta:
         verbose_name = 'category'
 
@@ -49,14 +49,14 @@ class Category(models.Model):
         
 class Occupation(models.Model):
     Cat=models.ForeignKey(Category,on_delete=models.CASCADE)
-    titile=models.CharField(max_length=250,unique=True)
+    titile=models.CharField(max_length=250,blank=True,null=True)
 
     class Meta:
         verbose_name = 'OCcupation'
 
  
     def __str__(self):
-        return self.titile
+        return self.Cat.Category_name
 
 class User(AbstractBaseUser):
     first_name=models.CharField(max_length=50)

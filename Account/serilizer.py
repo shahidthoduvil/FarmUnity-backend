@@ -34,3 +34,8 @@ class OccupationSerilizer(serializers.ModelSerializer):
     class Meta:
         model=Occupation
         fields='__all__'
+
+class GoogleAuthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Occupation
+        fields='__all__'

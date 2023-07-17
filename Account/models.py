@@ -56,7 +56,7 @@ class Occupation(models.Model):
 
  
     def __str__(self):
-        return self.Cat.Category_name
+        return self.titile
 
 class User(AbstractBaseUser):
     first_name=models.CharField(max_length=50)
@@ -65,7 +65,9 @@ class User(AbstractBaseUser):
     email=models.EmailField(max_length=100,unique=True)
     phone_number=models.CharField(max_length=50)
     pic=models.ImageField(upload_to="pro_pic/",null=True,blank=True,default="static/img/userprofile.jpg" )
+    cover=models.ImageField(upload_to="cover/",null=True,blank=True,default="static/img/userprofile.jpg" )
     Occup=models.ForeignKey(Occupation,on_delete=models.CASCADE, blank=True , null=True)
+    cat=models.ForeignKey(Category,on_delete=models.CASCADE,blank=True,null=True)
 
 
 

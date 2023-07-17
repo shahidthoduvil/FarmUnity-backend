@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -15,12 +16,15 @@ from .models import *
 
 from rest_framework import serializers
 from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
-from .serilizer import UserSerializer,GoogleAuthSerializer
+from .serilizer import *
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.filters import SearchFilter
+
 
 
 
@@ -51,11 +55,12 @@ class RegisterView(APIView):
         print(request.data)
 
         serializer=UserSerializer(data=request.data)
-        # cat=User.objects.get(Occupation=)
 
 
         if serializer.is_valid(raise_exception=True):
-            user  = serializer.save()
+            
+            user= serializer.save()
+    
 
             current_site = get_current_site(request)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -214,6 +219,19 @@ class ResetPasswordView(APIView):
             return HttpResponseRedirect('http://localhost:3000/reset-password')
         
 
+class ListUserview(ListAPIView):
+    serializer_class = UserSerializer
+    def get_queryset(self):
+        return User.objects.filter(is_admin=False, is_staff=False)
+    
+    
+# class AdminSearchUser(ListCreateAPIView):
+#     serializer_class = UserSerializer
+#     filter_backends = [SearchFilter]
+#     queryset = User.objects.filter(id=).exclude(is_superadmin=True)
+#     search_fields = ['username', 'first_name']  
+
+
 
 
 # for blocking  a user 
@@ -221,7 +239,7 @@ class ResetPasswordView(APIView):
 class BlockUser(APIView):
     def get(self,request,id):
         try:
-            user=User.object.get(id=id)
+            user=User.objects.get(id=id)
             print(user,'user')
             user.is_active=not user.is_active
             user.save()
@@ -234,6 +252,32 @@ class BlockUser(APIView):
 
 # get User Details
 
+
 class GetUserDetails(APIView):
-    pass
+
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        user_address = Address.objects.get(user=user)
+        ocup_instance=Occupation.objects.get(id=user.Occup.id)
+        print('Occup_instance',ocup_instance)
+        category=ocup_instance.Cat.Category_name
+        print('ffafalflafla',category)
+      
+
+
+        serializer = UserSerializer(user)
+        occup_serializer = OccupationSerilizer(ocup_instance)
+        user_serializer = AccountSerilizer(user_address)
+
+        response_data = {
+            'user': serializer.data,
+            'user_address': user_serializer.data,
+            'user_occupation': occup_serializer.data,
+            'user_category':category,
+
+        }
+        return Response(response_data)
+    
+
+
 

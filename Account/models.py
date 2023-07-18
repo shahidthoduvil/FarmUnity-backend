@@ -111,7 +111,6 @@ class Address(models.Model):
         district=models.CharField(max_length=100,unique=False)
         state=models.CharField(max_length=200,unique=False)
         country=models.CharField(max_length=150,unique=False)
-        phone_number=models.CharField(max_length=100)
         default=models.BooleanField(default=False)
 
 

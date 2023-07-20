@@ -225,11 +225,11 @@ class ListUserview(ListAPIView):
         return User.objects.filter(is_admin=False, is_staff=False)
     
     
-# class AdminSearchUser(ListCreateAPIView):
-#     serializer_class = UserSerializer
-#     filter_backends = [SearchFilter]
-#     queryset = User.objects.filter(id=).exclude(is_superadmin=True)
-#     search_fields = ['username', 'first_name']  
+class AdminSearchUser(ListCreateAPIView):
+     serializer_class = UserSerializer
+     filter_backends = [SearchFilter]
+     queryset = User.objects.filter(is_admin=False, is_staff=False)
+     search_fields = ['username']  
 
 
 
@@ -248,6 +248,8 @@ class BlockUser(APIView):
             return Response({'msg':"User not found"})
         except Exception as e:
             return Response({'msg':str(e)})
+            
+       
         
 
 # get User Details
@@ -273,11 +275,20 @@ class GetUserDetails(APIView):
             'user': serializer.data,
             'user_address': user_serializer.data,
             'user_occupation': occup_serializer.data,
-            'user_category':category,
+            'category': category,
 
         }
         return Response(response_data)
     
 
-
+class CreateUserProfile(APIView):
+    def put(self,request,user_id):
+        print(request.data)
+        user=Address.objects.get(id=user_id)
+        serializer=AccountSerilizer(instance=user,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':200})
+        return Response({'msg':500})
+        
 

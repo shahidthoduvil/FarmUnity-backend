@@ -21,12 +21,13 @@ urlpatterns = [
     
     path('blockUser/<int:id>/',views.BlockUser.as_view(),name="blockUser") ,
     path('listUser/', views.ListUserview.as_view()),
-   #  path('adminsearchUser/', views.AdminSearchUser.as_view()),
+    path('adminsearchUser/', views.AdminSearchUser.as_view()),
 
 
 #  # user Details
 
    path('getuserdetails/<int:user_id>',views.GetUserDetails.as_view(),name='UserDetails'),
+    path('userprofiledetails/<int:user_id>', views.CreateUserProfile.as_view()),
  
 
 ]

@@ -6,3 +6,4 @@ from.models import *
 admin.site.register(Member)
 admin.site.register(Banner)
 admin.site.register(Quote)
+admin.site.register(Review)

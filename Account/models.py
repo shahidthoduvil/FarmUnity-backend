@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
-
+from datetime import datetime, timedelta 
  
 # Create your models here.
 
@@ -98,7 +98,19 @@ class User(AbstractBaseUser):
     
     def has_module_perms(self,add_label):
         return True
+    def get_last_login_day(self):
+        return self.last_login.date()
+
+    def get_last_login_time(self):
+        return self.last_login.time()
     
+    def is_user_online(self):
+        # Assuming that if the user was active within the last 5 minutes,
+        # we consider them as "online".
+        # You can adjust the timedelta according to application's needs.
+        now = datetime.now()
+        last_active_threshold = now - timedelta(minutes=5)
+        return self.is_active and self.last_login >= last_active_threshold
 
 
 

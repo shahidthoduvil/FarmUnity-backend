@@ -136,7 +136,7 @@ class GoogleAuthentication(APIView):
                 user.is_active = True
                 user.set_password(password)
                 user.save()
-
+# 
         user = authenticate(request, email=email, password=password)
         if user is not None:
             tokens = create_jwt_pair_tokens(user)

@@ -26,8 +26,8 @@ urlpatterns = [
 
 #  # user Details
 
-   path('getuserdetails/<int:user_id>',views.GetUserDetails.as_view(),name='UserDetails'),
-    path('userprofiledetails/<int:user_id>', views.CreateUserProfile.as_view()),
+   path('getuserdetails/<int:user_id>/',views.GetUserDetails.as_view(),name='UserDetails'),
+    path('userprofiledetails/<int:user_id>/', views.CreateUserProfile.as_view()),
  
 
 ]

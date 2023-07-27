@@ -3,7 +3,7 @@ from .views import RegisterView
 from .import views
 from .views import MyTokenObtainPairView
 from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView)
-
+from .import views2
 urlpatterns = [
     path('', views.getRoutes), 
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -16,9 +16,7 @@ urlpatterns = [
     path('resetPassword_validate/<uidb64>/<token>/',views.ResetPassword_validate,name='resetPassword_validate'),
     path('resetPassword/',views.ResetPasswordView.as_view(), name='reset_password'),
  
- # admin side
-
-    
+ # admin side    
     path('blockUser/<int:id>/',views.BlockUser.as_view(),name="blockUser") ,
     path('listUser/', views.ListUserview.as_view()),
     path('adminsearchUser/', views.AdminSearchUser.as_view()),
@@ -27,8 +25,8 @@ urlpatterns = [
 #  # user Details
 
    path('getuserdetails/<int:user_id>/',views.GetUserDetails.as_view(),name='UserDetails'),
-    path('userprofiledetails/<int:user_id>/', views.CreateUserProfile.as_view()),
- 
+   path('profile-setup/', views.ProfileSetupView.as_view()),
+   path('category-occupation-list/', views2.CategoryOccupationListView.as_view(), name='category-occupation-list'),
 
 ]
 

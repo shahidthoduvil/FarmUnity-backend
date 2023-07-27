@@ -2,13 +2,13 @@ from django.contrib import admin
 
 from django.urls import path
 from .import views
+from .import views2
 
 
 
 urlpatterns = [
     path('banner-list/',views.getBannerLIst.as_view()),
     path('Admin-banner/',views.getAdminBannerLIst.as_view()),
-
     path('banner/<int:pk>/list_unlist/',views.ListUnlistBanner.as_view()),
     path('banner/delete/<int:pk>/',views.bannerDelete),
     path('banner/add/',views.BannerCreateView.as_view()),

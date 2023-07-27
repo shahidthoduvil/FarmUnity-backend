@@ -48,22 +48,22 @@ class Category(models.Model):
 
         
 class Occupation(models.Model):
-    Cat=models.ForeignKey(Category,on_delete=models.CASCADE)
+    Cat = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)    
     titile=models.CharField(max_length=250,blank=True,null=True)
 
     class Meta:
-        verbose_name = 'OCcupation'
+        verbose_name = 'Occupation'
 
  
     def __str__(self):
         return self.titile
 
 class User(AbstractBaseUser):
-    first_name=models.CharField(max_length=50)
-    last_name=models.CharField(max_length=50)
-    username=models.CharField(max_length=50,unique=True)
-    email=models.EmailField(max_length=100,unique=True)
-    phone_number=models.CharField(max_length=50)
+    first_name=models.CharField(max_length=50,blank=True    )
+    last_name=models.CharField(max_length=50,blank=True)
+    username=models.CharField(max_length=50,unique=True,blank=True)
+    email=models.EmailField(max_length=100,unique=True,blank=True)
+    phone_number=models.CharField(max_length=50,blank=True)
     pic=models.ImageField(upload_to="pro_pic/",null=True,blank=True,default="static/img/userprofile.jpg" )
     cover=models.ImageField(upload_to="cover/",null=True,blank=True,default="static/img/userprofile.jpg" )
     Occup=models.ForeignKey(Occupation,on_delete=models.CASCADE, blank=True , null=True)

@@ -10,6 +10,13 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from rest_framework import status
 from .tocken import create_jwt_pair_tokens
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serilizer import UserProfileSerializer, AccountSerilizer,OccupationSerilizer,CategorySerilizer
+from .models import User, Address, Category, Occupation
 
 
 from .models import *
@@ -281,14 +288,55 @@ class GetUserDetails(APIView):
         return Response(response_data)
     
 
-class CreateUserProfile(APIView):
-    def put(self,request,user_id):
-        print(request.data)
-        user=Address.objects.get(id=user_id)
-        serializer=AccountSerilizer(instance=user,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'msg':200})
-        return Response({'msg':500})
-        
 
+class ProfileSetupView(LoginRequiredMixin, APIView):
+    def get(self, request):
+        # Check if the user has already completed the profile setup
+        if request.user.is_setup_complete:
+            return redirect('profile')  # Redirect to the profile page if setup is complete
+        return Response({'message': 'Complete the Profile Setup'})
+
+    def post(self, request):
+        # Get the user object
+        user = request.user
+
+        # Check if the user has already completed the profile setup
+        if user.is_setup_complete:
+            return Response({'message': 'Profile setup is already complete'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get the data from the request
+        user_data = request.data.get('user', {})
+        address_data = request.data.get('address', {})
+        category_data = request.data.get('category', {})
+        occupation_data = request.data.get('occupation', {})
+
+        # Create serializers for each data type
+        user_serializer = UserProfileSerializer(data=user_data)
+        address_serializer = AccountSerialize(data=address_data)
+        category_serializer = CategorySerializer(data=category_data)
+        occupation_serializer = OccupationSerializer(data=occupation_data)
+
+        # Validate the data
+        if not user_serializer.is_valid() or not address_serializer.is_valid() \
+                or not category_serializer.is_valid() or not occupation_serializer.is_valid():
+            return Response({'message': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Save the user data
+        user_serializer.save()
+
+        # Save the address data with the user object
+        address_instance = address_serializer.save(user=user)
+
+        # Save the category data
+        category_instance = category_serializer.save()
+
+        # Save the occupation data with the category object
+        occupation_instance = occupation_serializer.save(Cat=category_instance)
+
+        # Update the user's occupation and category
+        user.Occup = occupation_instance
+        user.cat = category_instance
+        user.is_setup_complete = True
+        user.save()
+
+        return Response({'message': 'Profile setup completed successfully'}, status=status.HTTP_201_CREATED)

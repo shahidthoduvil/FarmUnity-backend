@@ -9,7 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
-    
+
+
+
+
+
+
     def create(self,validate_data):
         password=validate_data.pop('password',None)
         instance=self.Meta.model(**validate_data)
@@ -17,6 +22,13 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=['username','first_name','last_name','phone_number','email','pic','cover','Occup','cat']
+
 
 
 class AccountSerilizer(serializers.ModelSerializer):
@@ -24,6 +36,7 @@ class AccountSerilizer(serializers.ModelSerializer):
         model=Address
         fields='__all__'
     
+
 class CategorySerilizer(serializers.ModelSerializer):
     class Meta:
         model=Category

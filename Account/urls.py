@@ -25,7 +25,9 @@ urlpatterns = [
 #  # user Details
 
    path('getuserdetails/<int:user_id>/',views.GetUserDetails.as_view(),name='UserDetails'),
-   path('profile-setup/', views.ProfileSetupView.as_view()),
+   path('profile-setup1/<int:id>/', views.userProfileSet1.as_view()),
+   path('profile-setup2/', views.userProfileSet2.as_view()),
+
    path('category-occupation-list/', views2.CategoryOccupationListView.as_view(), name='category-occupation-list'),
 
 ]

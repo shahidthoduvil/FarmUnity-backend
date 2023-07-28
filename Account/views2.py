@@ -31,17 +31,17 @@ class CategoryOccupationListView(APIView):
         category_id = request.query_params.get('category')
         
         # Fetch all categories
-        categories = Category.objects.all()
+        cat = Category.objects.all()
         
         # If a category ID is provided in the request, filter occupations by that category
         if category_id:
             occupations = Occupation.objects.filter(Cat=category_id)
         else:
             # If no category ID is provided, return all occupations
-            occupations = Occupation.objects.all()
+            Occup = Occupation.objects.all()
 
-        category_serializer = CategorySerilizer(categories, many=True)
-        occupation_serializer =OccupationSerilizer(occupations, many=True)
+        category_serializer = CategorySerilizer(cat, many=True)
+        occupation_serializer =OccupationSerilizer(Occup, many=True)
 
         return Response({
             'categories': category_serializer.data,

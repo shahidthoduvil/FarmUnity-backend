@@ -61,7 +61,7 @@ class Occupation(models.Model):
 class User(AbstractBaseUser):
     first_name=models.CharField(max_length=50,blank=True    )
     last_name=models.CharField(max_length=50,blank=True)
-    username=models.CharField(max_length=50,unique=True,blank=True)
+    username=models.CharField(max_length=50,blank=True)
     email=models.EmailField(max_length=100,unique=True,blank=True)
     phone_number=models.CharField(max_length=50,blank=True)
     pic=models.ImageField(upload_to="pro_pic/",null=True,blank=True,default="static/img/userprofile.jpg" )
@@ -115,15 +115,15 @@ class User(AbstractBaseUser):
 
 
 class Address(models.Model):
-        user=models.ForeignKey(User,on_delete=models.CASCADE)
-        house_name=models.CharField(max_length=250,unique=False)
-        landmark=models.CharField(max_length=100)
-        pincode=models.IntegerField()
-        city=models.CharField(max_length=200,unique=False)
-        district=models.CharField(max_length=100,unique=False)
-        state=models.CharField(max_length=200,unique=False)
-        country=models.CharField(max_length=150,unique=False)
-        default=models.BooleanField(default=False)
+        user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True)
+        house_name=models.CharField(max_length=250,unique=False,blank=True)
+        landmark=models.CharField(max_length=100,blank=True)
+        pincode=models.IntegerField(blank=True)
+        city=models.CharField(max_length=200,unique=False,blank=True)
+        district=models.CharField(max_length=100,unique=False,blank=True)
+        state=models.CharField(max_length=200,unique=False,blank=True)
+        country=models.CharField(max_length=150,unique=False,blank=True)
+        default=models.BooleanField(default=False,blank=True)
 
 
 

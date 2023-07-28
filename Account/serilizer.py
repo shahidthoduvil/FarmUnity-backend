@@ -27,14 +27,14 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        fields=['username','first_name','last_name','phone_number','email','pic','cover','Occup','cat']
+        fields=['pic','cover','Occup','cat']
 
 
 
 class AccountSerilizer(serializers.ModelSerializer):
     class Meta:
         model=Address
-        fields='__all__'
+        fields= '__all__'
     
 
 class CategorySerilizer(serializers.ModelSerializer):

@@ -289,7 +289,7 @@ class GetUserDetails(APIView):
         return Response(response_data)
     
 
-class userProfileSet1(UpdateAPIView):
+class   userProfileSet1(UpdateAPIView):
   queryset=User.objects.all()
   serializer_class=UserProfileSerializer
   lookup_field='id'
@@ -297,6 +297,4 @@ class userProfileSet1(UpdateAPIView):
 class userProfileSet2(ListCreateAPIView):
 
   queryset=Address.objects.all()
-  serializer_class=AccountSerilizer
-
-    
+  serializer_class=AccountSerilizer    

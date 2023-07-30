@@ -68,7 +68,7 @@ class User(AbstractBaseUser):
     cover=models.ImageField(upload_to="cover/",null=True,blank=True,default="static/img/userprofile.jpg" )
     Occup=models.ForeignKey(Occupation,on_delete=models.CASCADE, blank=True , null=True)
     cat=models.ForeignKey(Category,on_delete=models.CASCADE,blank=True,null=True)
-
+    is_setup_complete = models.BooleanField(default=False)
 
 
     #required

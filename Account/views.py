@@ -32,6 +32,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.filters import SearchFilter
+from .permision import IsAuthenticatedWithToken
 
 
 
@@ -265,6 +266,8 @@ class BlockUser(APIView):
 
 class GetUserDetails(APIView):
 
+    permission_classes = [IsAuthenticatedWithToken]
+
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         user_address = Address.objects.get(user=user)
@@ -289,7 +292,7 @@ class GetUserDetails(APIView):
         return Response(response_data)
     
 
-class   userProfileSet1(UpdateAPIView):
+class  userProfileSet1(UpdateAPIView):
   queryset=User.objects.all()
   serializer_class=UserProfileSerializer
   lookup_field='id'

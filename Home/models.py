@@ -5,7 +5,7 @@ from Account.models import User
 
 
 class Banner(models.Model):
-    title=models.CharField(max_length=50,blank=True,null=True)
+    title=models.CharField(max_length=200,blank=True,null=True)
     img=models.ImageField(default='default.jpg', upload_to='Banner')
     is_list=models.BooleanField(default=False)
 
@@ -30,7 +30,7 @@ class Quote(models.Model):
        return self.Author
 
 class Member(models.Model):
-    title=models.CharField( max_length=50,blank=True,null=True)
+    title=models.CharField( max_length=200,blank=True,null=True)
     img=models.ImageField(default='default.jpg',upload_to='Member')
     is_list=models.BooleanField(default=False)
 

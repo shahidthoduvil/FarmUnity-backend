@@ -30,6 +30,9 @@ urlpatterns = [
     path('member/add/',views.MemberCreateView.as_view()),
     path('member/<int:pk>/Edit/',views.MemberEditView.as_view()),
 
+
+ path('users/category/<str:categoryName>/', views2.UserByCategoryView.as_view(), name='users-by-category'),
+  path('users/search/<str:categoryName>/', views2.SearchUsersByCategory.as_view(), name='search-users-by-category'),
     
 
 ]

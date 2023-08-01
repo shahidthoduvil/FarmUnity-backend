@@ -6,6 +6,7 @@ from .models import User
 
 def authenticate_request(request):
     auth_header = request.headers.get('Authorization')
+    print('Request Header :: ',auth_header)
     try:
         role = json.loads(request.body.decode('utf-8')).get('role')
     except:

@@ -61,29 +61,12 @@ class AddressUpdateView(UpdateAPIView):
    lookup_field='user__id'
 
 
-
-class CheckProfileSetupView(APIView):
-
-
-    def get(self, request, *args, **kwargs):
-        try:
-            print(request.data)
-
-            user = User.objects.get(id=request.data.user)
-         
-            if user.is_setup_complete:
-                # Profile setup is complete, return the serialized data
-
-                user_profile_serializer = UserProfileSerializer(user)
-                account_data = Address.objects.get(user=request.user)
-                account_serializer = AccountSerilizer(account_data)
-                return Response({
-                    "detail": "Profile setup is complete.",
-                    "user_profile": user_profile_serializer.data,
-                    "account_data": account_serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                # Profile setup is not complete
-                return Response({"detail": "Profile setup is not complete."}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"detail": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+@api_view(['GET'])
+def check_profile_setup(request,id):
+    
+    try:
+        user = User.objects.get(id=id)
+        is_setup_complete = user.is_setup_complete
+    except:
+        return Response({"Error": 'Some error occured'})
+    return Response({"is_setup_complete": is_setup_complete})

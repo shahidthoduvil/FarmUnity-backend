@@ -63,7 +63,7 @@ class RegisterView(APIView):
         email=request.data.get('email')
         print(request.data)
 
-        serializer=UserSerializer(data=request.data)
+        serializer=UserRegister(data=request.data)
 
 
         if serializer.is_valid(raise_exception=True):
@@ -157,7 +157,7 @@ class GoogleAuthentication(APIView):
                     'user_id': user.id,
                     'email': user.email,
                     'is_active': user.is_active,
-                    'role': user.role,
+                   
                 },
             }
             return Response(data=response, status=status.HTTP_200_OK)
@@ -231,7 +231,7 @@ class ResetPasswordView(APIView):
 class ListUserview(ListAPIView):
     serializer_class = UserSerializer
     def get_queryset(self):
-        return User.objects.filter(is_admin=False, is_staff=False)
+        return User.objects.filter(is_admin=False, is_staff=False).order_by('-id')
     
     
 class AdminSearchUser(ListCreateAPIView):
@@ -246,7 +246,7 @@ class AdminSearchUser(ListCreateAPIView):
 # for blocking  a user 
 
 class BlockUser(APIView):
-    def get(self,request,id):
+    def patch(self,request,id):
         try:
             user=User.objects.get(id=id)
             print(user,'user')
@@ -266,11 +266,12 @@ class BlockUser(APIView):
 
 class GetUserDetails(APIView):
 
-    permission_classes = [IsAuthenticatedWithToken]
+
 
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         user_address = Address.objects.get(user=user)
+        print('idjkdlfk',user.Occup)
         ocup_instance=Occupation.objects.get(id=user.Occup.id)
         print('Occup_instance',ocup_instance)
         category=ocup_instance.Cat.Category_name

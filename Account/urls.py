@@ -30,6 +30,5 @@ urlpatterns = [
     path('update-profile/<int:id>/', views2.UserProfileUpdateView.as_view(), name='update-profile'),
    path('category-occupation-list/', views2.CategoryOccupationListView.as_view(), name='category-occupation-list'),
    path('update_address/<int:user__id>/', views2.AddressUpdateView.as_view(), name='update-address'),
-   path('check-profile-setup/', views2.CheckProfileSetupView.as_view(), name='check-profile-setup'),
+   path('check-profile-setup/<int:id>/', views2.check_profile_setup, name='check_profile_setup'),
 ]
-

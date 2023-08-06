@@ -1,5 +1,5 @@
 from django.db import models
-from Account.models import User
+from Account.models import User,Category
 
 # Create your models here.
 
@@ -33,12 +33,20 @@ class Member(models.Model):
     title=models.CharField( max_length=200,blank=True,null=True)
     img=models.ImageField(default='default.jpg',upload_to='Member')
     is_list=models.BooleanField(default=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
        verbose_name='Member'
 
     def __str__(self):
        return self.title
+    
+    def unlist_associated_users(self):
+        if self.category:
+            associated_users = User.objects.filter(cat=self.category, is_active=True)
+            for user in associated_users:
+                user.is_active = False
+                user.save()
     
 
 

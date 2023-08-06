@@ -198,6 +198,14 @@ class ListUnlistMember(APIView):
         member.is_list = is_list
         member.save()
 
+    
+        # if not is_list and member.category:
+        #     from django.contrib.auth import get_user_model
+        #     User = get_user_model()
+        #     associated_users = User.objects.filter(cat=member.category, is_active=True)
+        #     for user in associated_users:
+        #         user.is_active = False
+        #         user.save()
         serializer = QuoteListSerializer(member)
         return Response(serializer.data)
 

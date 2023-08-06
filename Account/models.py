@@ -32,9 +32,6 @@ class AccountManger(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
-    
-
-
 
 
 class Category(models.Model):
@@ -42,7 +39,6 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'category'
 
- 
     def __str__(self):
         return self.Category_name
 

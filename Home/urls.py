@@ -33,7 +33,7 @@ urlpatterns = [
 
  path('users/category/<str:categoryName>/', views2.UserByCategoryView.as_view(), name='users-by-category'),
   path('users/search/<str:categoryName>/', views2.SearchUsersByCategory.as_view(), name='search-users-by-category'),
-    
+ path('users/auto-suggest/<str:categoryName>/', views2.AutoSuggestUsers.as_view(), name='auto-suggest'), 
 
 ]
 

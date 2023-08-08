@@ -266,17 +266,16 @@ class BlockUser(APIView):
 
 class GetUserDetails(APIView):
 
-
-
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         user_address = Address.objects.get(user=user)
+        
         print('idjkdlfk',user.Occup)
         ocup_instance=Occupation.objects.get(id=user.Occup.id)
         print('Occup_instance',ocup_instance)
         category=ocup_instance.Cat.Category_name
         print('ffafalflafla',category)
-      
+        
 
 
         serializer = UserSerializer(user)
@@ -284,13 +283,43 @@ class GetUserDetails(APIView):
         user_serializer = AccountSerilizer(user_address)
 
         response_data = {
-            'user': serializer.data,
-            'user_address': user_serializer.data,
-            'user_occupation': occup_serializer.data,
-            'category': category,
+                'user': serializer.data,
+                'user_address': user_serializer.data,
+                'user_occupation': occup_serializer.data,
+                'category': category,
 
-        }
+            }
         return Response(response_data)
+     
+
+class GetsingleDetails(APIView):
+
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        user_address = Address.objects.get(user=user)
+        
+        print('idjkdlfk',user.Occup)
+        ocup_instance=Occupation.objects.get(id=user.Occup.id)
+        print('Occup_instance',ocup_instance)
+        category=ocup_instance.Cat.Category_name
+        print('ffafalflafla',category)
+        
+
+
+        serializer = UserSerializer(user)
+        occup_serializer = OccupationSerilizer(ocup_instance)
+        user_serializer = AccountSerilizer(user_address)
+
+        response_data = {
+                'user': serializer.data,
+                'user_address': user_serializer.data,
+                'user_occupation': occup_serializer.data,
+                'category': category,
+
+            }
+        return Response(response_data)
+     
+   
     
 
 class  userProfileSet1(UpdateAPIView):

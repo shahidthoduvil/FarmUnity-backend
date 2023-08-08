@@ -11,8 +11,20 @@ class Post(models.Model):
     location=models.CharField(max_length=100,null=True)
     user=models.ForeignKey(User, on_delete=models.CASCADE,blank=True)
 
+    class Meta:
+       verbose_name='Post'
+
+    def __str__(self):
+       return self.title
+
 
 class Comments(models.Model):
     comment=models.TextField(blank=True)
     count=models.IntegerField(null=True)
     post=models.ForeignKey(Post,on_delete=models.CASCADE,blank=True)
+
+    class Meta:
+       verbose_name='Comment'
+
+    def __str__(self):
+       return self.comment

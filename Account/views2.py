@@ -24,8 +24,9 @@ from rest_framework.generics import ListAPIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.filters import SearchFilter
-
-
+from .helpers import authenticate_user
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 class CategoryOccupationListView(APIView):
     def get(self, request):
@@ -70,3 +71,21 @@ def check_profile_setup(request,id):
     except:
         return Response({"Error": 'Some error occured'})
     return Response({"is_setup_complete": is_setup_complete})
+
+
+@api_view(["POST"])
+@csrf_exempt
+def is_user(request):
+    isVerified = authenticate_user(request, "user")
+   
+    print("user verification", isVerified)
+    return JsonResponse(isVerified is not None, safe=False)
+
+
+@api_view(["POST"])
+@csrf_exempt
+def is_admin(request):
+    isVerified = authenticate_user(request, "admin")
+    print("admin verification", isVerified)
+    return JsonResponse(isVerified is not None, safe=False)
+

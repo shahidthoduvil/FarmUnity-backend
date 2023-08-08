@@ -10,7 +10,8 @@ urlpatterns = [
     path('google_authentication/',views.GoogleAuthentication.as_view()),
     path('register/',RegisterView.as_view()),
     path('activate/<uidb64>/<token> ', views.Activate, name='activate'),
-
+    path('is-user/',views2.is_user),
+    path('is-admin/',views2.is_admin),
 
     path('forgot_password/', views.ForgotPasswordView.as_view(), name='forgot_password'),
     path('resetPassword_validate/<uidb64>/<token>/',views.ResetPassword_validate,name='resetPassword_validate'),
@@ -25,6 +26,7 @@ urlpatterns = [
 #  # user Details
 
    path('getuserdetails/<int:user_id>/',views.GetUserDetails.as_view(),name='UserDetails'),
+   path('getsingledetails/<int:user_id>/',views.GetUserDetails.as_view(),name='UserDetails'),
    path('profile-setup1/<int:id>/', views.userProfileSet1.as_view()),
    path('profile-setup2/', views.userProfileSet2.as_view()),
     path('update-profile/<int:id>/', views2.UserProfileUpdateView.as_view(), name='update-profile'),

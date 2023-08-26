@@ -213,3 +213,4 @@ class ListUnlistMember(APIView):
 class MemberEditView(generics.RetrieveUpdateDestroyAPIView):
     queryset=Member.objects.all()
     serializer_class=MemberListSerializer
+    print(serializer_class,'admin member edit ')

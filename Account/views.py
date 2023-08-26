@@ -116,8 +116,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['email'] = user.email
+        token['username'] = user.username
         token['is_staff'] = user.is_staff
         token['is_admin'] = user.is_admin
+        token['is_setup_complete'] = user. is_setup_complete
+        return token
+        
+
 
         return token
     
@@ -265,59 +270,87 @@ class BlockUser(APIView):
 
 
 class GetUserDetails(APIView):
-
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         user_address = Address.objects.get(user=user)
-        
-        print('idjkdlfk',user.Occup)
-        ocup_instance=Occupation.objects.get(id=user.Occup.id)
-        print('Occup_instance',ocup_instance)
-        category=ocup_instance.Cat.Category_name
-        print('ffafalflafla',category)
-        
 
+        ocup_instance = None
+        category = None
+        
+        if user.Occup: 
+            ocup_instance = Occupation.objects.get(id=user.Occup.id)
+            category = ocup_instance.Cat.Category_name
 
         serializer = UserSerializer(user)
-        occup_serializer = OccupationSerilizer(ocup_instance)
+        occup_serializer = OccupationSerilizer(ocup_instance) if ocup_instance else None
         user_serializer = AccountSerilizer(user_address)
 
         response_data = {
-                'user': serializer.data,
-                'user_address': user_serializer.data,
-                'user_occupation': occup_serializer.data,
-                'category': category,
-
-            }
+            'user': serializer.data,
+            'user_address': user_serializer.data,
+            'user_occupation': occup_serializer.data if occup_serializer else None,
+            'category': category,
+        }
         return Response(response_data)
+
+
+
+
+
+
+
      
 
 class GetsingleDetails(APIView):
 
-    def get(self, request, user_id):
+   def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         user_address = Address.objects.get(user=user)
-        
-        print('idjkdlfk',user.Occup)
-        ocup_instance=Occupation.objects.get(id=user.Occup.id)
-        print('Occup_instance',ocup_instance)
-        category=ocup_instance.Cat.Category_name
-        print('ffafalflafla',category)
-        
 
+        ocup_instance = None
+        category = None
+        
+        if user.Occup:  # Check if user has an associated occupation
+            ocup_instance = Occupation.objects.get(id=user.Occup.id)
+            category = ocup_instance.Cat.Category_name
 
         serializer = UserSerializer(user)
-        occup_serializer = OccupationSerilizer(ocup_instance)
+        occup_serializer = OccupationSerilizer(ocup_instance) if ocup_instance else None
         user_serializer = AccountSerilizer(user_address)
 
         response_data = {
-                'user': serializer.data,
-                'user_address': user_serializer.data,
-                'user_occupation': occup_serializer.data,
-                'category': category,
-
-            }
+            'user': serializer.data,
+            'user_address': user_serializer.data,
+            'user_occupation': occup_serializer.data if occup_serializer else None,
+            'category': category,
+        }
         return Response(response_data)
+
+
+    # def get(self, request, user_id):
+    #     user = User.objects.get(id=user_id)
+    #     user_address = Address.objects.get(user=user)
+        
+    #     print('idjkdlfk',user.Occup)
+    #     ocup_instance=Occupation.objects.get(id=user.Occup.id)
+    #     print('Occup_instance',ocup_instance)
+    #     category=ocup_instance.Cat.Category_name
+    #     print('ffafalflafla',category)
+        
+
+
+    #     serializer = UserSerializer(user)
+    #     occup_serializer = OccupationSerilizer(ocup_instance)
+    #     user_serializer = AccountSerilizer(user_address)
+
+    #     response_data = {
+    #             'user': serializer.data,
+    #             'user_address': user_serializer.data,
+    #             'user_occupation': occup_serializer.data,
+    #             'category': category,
+
+    #         }
+    #     return Response(response_data)
      
    
     
@@ -331,3 +364,11 @@ class userProfileSet2(ListCreateAPIView):
 
   queryset=Address.objects.all()
   serializer_class=AccountSerilizer    
+
+
+@api_view(['POST'])
+def get_new_token(request):
+    email = request.data.get('email')
+    user = User.objects.get(email=email)
+    token = create_jwt_pair_tokens(user)
+    return Response(status=200,data={'token':token})

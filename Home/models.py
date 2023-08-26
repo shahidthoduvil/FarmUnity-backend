@@ -50,14 +50,14 @@ class Member(models.Model):
     
 
 
-
 class Review(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    message=models.TextField()
-    rate=models.IntegerField(default=0)
-    created_at=models.DateTimeField( auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')  
+    message = models.TextField()
+    rate = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE,null=True, related_name='additional_reviews') 
 
     def __str__(self) :
-        return self.user
+        return self.message
     
     

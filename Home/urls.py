@@ -31,9 +31,22 @@ urlpatterns = [
     path('member/<int:pk>/Edit/',views.MemberEditView.as_view()),
 
 
- path('users/category/<str:categoryName>/', views2.UserByCategoryView.as_view(), name='users-by-category'),
-  path('users/search/<str:categoryName>/', views2.SearchUsersByCategory.as_view(), name='search-users-by-category'),
- path('users/auto-suggest/<str:categoryName>/', views2.AutoSuggestUsers.as_view(), name='auto-suggest'), 
+   path('users/category/<str:categoryName>/', views2.UserByCategoryView.as_view(), name='users-by-category'),
+   path('users/search/<str:categoryName>/', views2.SearchUsersByCategory.as_view(), name='search-users-by-category'),
+   path('users/auto-suggest/<str:categoryName>/', views2.AutoSuggestUsers.as_view(), name='auto-suggest'), 
+   path('getuserinfo/<str:username>/',views2.GetUserinfo.as_view(),name='UserDetails'),
+
+
+# path('reviews/', views2.AllReviewsListView.as_view()),
+
+   path('<int:user1_id>/reviews/', views2.User1ReviewsListView.as_view()),
+   path('<str:username>/singlereview/', views2.User1Reviews.as_view()),
+
+   path('create-review/', views2.User1CreateReviews.as_view(), name='user1-reviews'),
+
+    path('<int:id>/delete-review/', views2.ReviewDeleteView.as_view()),
+
+
 
 ]
 

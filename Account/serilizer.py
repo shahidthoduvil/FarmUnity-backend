@@ -11,8 +11,15 @@ class UpdateUserProfileSerializer(serializers.ModelSerializer):
 
 class AccountSerilizer(serializers.ModelSerializer):
     class Meta:
-        model=Address
-        fields= '__all__'
+        model = Address
+        fields = '__all__'
+
+    def create(self, validated_data):
+        instance = Address.objects.create(**validated_data)
+        user_instance = instance.user
+        user_instance.is_setup_complete = True
+        user_instance.save() 
+        return instance
     
 
 class CategorySerilizer(serializers.ModelSerializer):
@@ -97,6 +104,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-
+class getProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+        
+class AdminProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=['username','email','pic','cover','phone_number','id']
 
 

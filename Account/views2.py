@@ -16,7 +16,7 @@ from .models import *
 
 from rest_framework import serializers
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveAPIView
 from rest_framework.response import Response
 from .serilizer import *
 from rest_framework.decorators import api_view
@@ -88,4 +88,18 @@ def is_admin(request):
     isVerified = authenticate_user(request, "admin")
     print("admin verification", isVerified)
     return JsonResponse(isVerified is not None, safe=False)
+
+
+# class AdminProfileDetailView(RetrieveAPIView):
+#     serializer_class = AdminProfileSerializer
+
+#     def get_queryset(self):
+#         return User.objects.filter(is_admin=True, is_staff=True)
+    
+
+class AdminProfileDetailView(APIView):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        serializer = AdminProfileSerializer(user)
+        return Response(data=serializer.data)
 

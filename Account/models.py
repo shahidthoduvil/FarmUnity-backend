@@ -60,8 +60,8 @@ class User(AbstractBaseUser):
     username=models.CharField(max_length=50,blank=True)
     email=models.EmailField(max_length=100,unique=True,blank=True)
     phone_number=models.CharField(max_length=50,blank=True)
-    pic=models.ImageField(upload_to="pro_pic/",null=True,blank=True,default="static/img/userprofile.jpg" )
-    cover=models.ImageField(upload_to="cover/",null=True,blank=True,default="static/img/userprofile.jpg" )
+    pic=models.ImageField(upload_to="pro_pic/",null=True,blank=True)
+    cover=models.ImageField(upload_to="cover/",null=True,blank=True)
     Occup=models.ForeignKey(Occupation,on_delete=models.CASCADE, blank=True , null=True)
     cat=models.ForeignKey(Category,on_delete=models.CASCADE,blank=True,null=True)
     is_setup_complete = models.BooleanField(default=False)
@@ -87,7 +87,7 @@ class User(AbstractBaseUser):
 
 
     def __str__(self):
-        return self.email
+        return self.email 
     
     def has_perm(self,pars,obj=None):
         return self.is_admin
@@ -121,7 +121,8 @@ class Address(models.Model):
         country=models.CharField(max_length=150,unique=False,blank=True)
         default=models.BooleanField(default=False,blank=True)
 
-
+        def __str__(self):
+            return self.user.username
 
 
 

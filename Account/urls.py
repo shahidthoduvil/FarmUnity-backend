@@ -33,4 +33,6 @@ urlpatterns = [
    path('category-occupation-list/', views2.CategoryOccupationListView.as_view(), name='category-occupation-list'),
    path('update_address/<int:user__id>/', views2.AddressUpdateView.as_view(), name='update-address'),
    path('check-profile-setup/<int:id>/', views2.check_profile_setup, name='check_profile_setup'),
+   path('get-new-token', views.get_new_token),
+   path('admin-profiles/<int:user_id>/', views2.AdminProfileDetailView.as_view()),
 ]

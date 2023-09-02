@@ -3,8 +3,14 @@
 Hii {{user.username}},
 
 Please click on below link to confirm your registration.
-http://127.0.0.1:8000/{% url 'activate' uidb64=uid token=token %}
+
+http://127.0.0.1:8000{% url 'activate' uidb64=uid token=token %}
 
 If its not you, please ignore this mail.
+
+
+This link will be valid for 1 minutes.
+
+If it's not you, please ignore this mail.
 
 {% endautoescape %}

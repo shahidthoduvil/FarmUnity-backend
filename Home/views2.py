@@ -11,19 +11,25 @@ from Account.serilizer import *
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from Account.permision import IsAuthenticatedWithToken
+from rest_framework.pagination import PageNumberPagination
 User = get_user_model()
 
 class UserByCategoryView(APIView):
     permission_classes = [IsAuthenticatedWithToken]
+    pagination_class = PageNumberPagination
 
     def get(self, request, categoryName):
         try:
             users = User.objects.filter(Occup__Cat__Category_name=categoryName).exclude(id=request.user.id)
-
+            
             serializer = UserSerializer(users, many=True)
             return Response(serializer.data)
         except Exception as e:
             return Response({"message": f"Error fetching users by category. {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+    
+
 
 class SearchUsersByCategory(APIView):
     def get(self, request, categoryName):

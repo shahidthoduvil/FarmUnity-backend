@@ -27,6 +27,11 @@ from rest_framework.filters import SearchFilter
 from .helpers import authenticate_user
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+
 
 class CategoryOccupationListView(APIView):
     def get(self, request):
@@ -64,13 +69,14 @@ class AddressUpdateView(UpdateAPIView):
 
 @api_view(['GET'])
 def check_profile_setup(request,id):
-    
+
     try:
         user = User.objects.get(id=id)
         is_setup_complete = user.is_setup_complete
     except:
         return Response({"Error": 'Some error occured'})
     return Response({"is_setup_complete": is_setup_complete})
+
 
 
 @api_view(["POST"])

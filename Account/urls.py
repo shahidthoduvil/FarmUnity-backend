@@ -18,7 +18,8 @@ urlpatterns = [
     path('resetPassword/',views.ResetPasswordView.as_view(), name='reset_password'),
  
  # admin side    
-    path('blockUser/<int:id>/',views.BlockUser.as_view(),name="blockUser") ,
+    path('blockUser/<int:id>/',views.BlockUser.as_view()) ,
+   # path('send-notification/', views2.SendNotificationEmail.as_view()),
     path('listUser/', views.ListUserview.as_view()),
     path('adminsearchUser/', views.AdminSearchUser.as_view()),
 

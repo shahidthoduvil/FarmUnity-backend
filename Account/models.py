@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 from datetime import datetime, timedelta 
+from  django.db.models.signals  import pre_save,post_save
+from django.dispatch import  receiver
+from django.core.mail import send_mail
+from django.conf import settings
  
 # Create your models here.
 
@@ -101,9 +105,6 @@ class User(AbstractBaseUser):
         return self.last_login.time()
     
     def is_user_online(self):
-        # Assuming that if the user was active within the last 5 minutes,
-        # we consider them as "online".
-        # You can adjust the timedelta according to application's needs.
         now = datetime.now()
         last_active_threshold = now - timedelta(minutes=5)
         return self.is_active and self.last_login >= last_active_threshold
@@ -126,6 +127,28 @@ class Address(models.Model):
 
 
 
-        
+@receiver(post_save, sender=User)
+def user_blocking_notification(sender, instance, **kwargs):
+        print(kwargs,'kkwasgs>>>>>>>>>>>>>>>>')
+       
 
-            
+  
+        if instance.is_active:
+                subject = "You've been unblocked"
+                message = f"Dear {instance.username},\n\nYour account has been unblocked by the admin."
+        else:
+                subject = "You've been blocked"
+                message = f"Dear {instance.username},\n\nYour account has been blocked by the admin."
+
+        send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [instance.email],
+                fail_silently=False,
+        )
+
+
+
+
+

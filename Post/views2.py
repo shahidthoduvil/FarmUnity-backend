@@ -19,13 +19,27 @@ class FollowView(APIView):
         is_followed=True if instance.exists() else False
         status_code=200 if is_followed else 404
 
+        
+        follower_count = Follow.objects.filter(followed_user__id=user1).count()
+        following_count = Follow.objects.filter(following_user__id=user2).count()
+
         print('status===',status_code)
-        return Response(data={"is_followed":is_followed},status=status_code)
+        return Response(data={"is_followed":is_followed,
+                                 "follower_count": follower_count,
+                                 "following_count": following_count,
+
+                              },status=status_code)
     
-    def post(self, request, user1, user2):
+    def post(self, request, user1, user2): 
+        
         try:
             following_user = User.objects.get(id=user1)
             followed_user = User.objects.get(id=user2)
+
+
+            if Follow.objects.filter(following_user=following_user, followed_user=followed_user).exists():
+                return Response(status=400, data={'error': 'Already following this user'})
+            
             Follow.objects.create(
                 following_user=following_user, followed_user=followed_user
             )

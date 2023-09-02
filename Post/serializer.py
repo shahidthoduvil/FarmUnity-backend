@@ -8,18 +8,37 @@ from rest_framework.serializers import SerializerMethodField
 class PostSerializer(serializers.ModelSerializer):
      
     user = UserSerializer() 
-    # is_liked = SerializerMethodField()
+    is_liked = SerializerMethodField()
 
   
     class Meta:
         model=Post
-        fields=['id', 'title', 'description', 'image', 'date', 'user','comment_count','like_count','Location']
+        fields=['id', 'title', 'description', 'image', 'date', 'user','comment_count','like_count','Location','is_liked']
 
     
-    # def get_is_liked(self,obj):
-    #     user = User.objects.get(id=self.context.get('user_id'))    
-    #     print(Like.objects.filter(user=user,post=obj))
-    #     return Like.objects.filter(user=user,post=obj).exists()
+    def get_is_liked(self,obj):
+        user = User.objects.get(id=self.context.get('user_id'))  
+        print(Like.objects.filter(user=user,post=obj))
+        return Like.objects.filter(user=user,post=obj).exists()
+    
+
+class PostUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer() 
+    is_liked = SerializerMethodField()
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'description', 'image', 'date', 'user', 'comment_count', 'like_count', 'Location', 'is_liked']
+
+    def get_is_liked(self, obj):
+        username = self.context.get('username')
+        if username is not None:
+            try:
+                user = User.objects.get(username=username)
+                return Like.objects.filter(user=user, post=obj).exists()
+            except User.DoesNotExist:
+                return False
+        return False
 
 
 class CommentSerializer(serializers.ModelSerializer):

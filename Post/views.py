@@ -21,11 +21,41 @@ from rest_framework import viewsets
 #     print(queryset,'fkjjfojsofjof')
 #     serializer_class = PostSerializer
 
-class PostList(ListAPIView):
+# class PostList(ListAPIView):
+#     serializer_class = PostSerializer
+
+#     def get_queryset(self):
+#         return Post.objects.select_related('user').all().order_by('-date')
+
+
+class PostList(APIView):
+    def get(self, request,user_id):
+        posts = Post.objects.all().order_by('-date')
+        serializer = PostSerializer(posts, many=True,context={'user_id': user_id})  
+        return Response(serializer.data, status=200)
+    
+
+
+class PostListAdmin(APIView):
+       def get(self, request,user_id):
+        posts = Post.objects.all().order_by('-date')
+        serializer = PostSerializer(posts, many=True,context={'user_id': user_id})  
+        return Response(serializer.data, status=200)
+
+
+
+class PostListCreateAPIView(ListCreateAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return Post.objects.select_related('user').all().order_by('-date')
+        user_id = self.kwargs.get("user")
+        print()
+        print('start')
+        print(self.kwargs,'kwargs>>>>>>>>>')
+        print()
+        return Post.objects.all().order_by('-date')
+    
+
     
 
 class AddPostView(CreateAPIView):
@@ -70,13 +100,33 @@ class AddCommentView(generics.CreateAPIView):
      serializer_class = CommentSerializer
 
 
-
 class UserPostList(ListAPIView):
     serializer_class = PostSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['user_id'] = self.kwargs['user_id']
+        return context
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']  
         return Post.objects.filter(user_id=user_id).order_by('-date')
+    
+
+
+class UserPost(ListAPIView):
+    serializer_class =  PostUserSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['username'] = self.kwargs['username']
+        return context
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        return Post.objects.filter(user__username=username).order_by('-date')
+
+    
 
 
 class DeletePost(APIView):
@@ -99,21 +149,34 @@ class CommentDeleteView(DestroyAPIView):
     lookup_field='id'
 
 
-@api_view(['POST'])
-def un_like_post(request):
-    user_id = request.data.get('user')
-    post_id = request.data.get('post')
-    is_post_exist = Like.objects.filter(post__id=post_id,user__id=user_id).exists()
-    if is_post_exist:
-        post_like_instance = Like.objects.get(post__id=post_id,user__id=user_id)
+# @api_view(['POST'])
+# def un_like_post(request):
+#     user_id = request.data.get('user')
+#     post_id = request.data.get('post')
+#     is_post_exist = Like.objects.filter(post__id=post_id,user__id=user_id).exists()
+#     if is_post_exist:
+#         post_like_instance = Like.objects.get(post__id=post_id,user__id=user_id)
+#         post_like_instance.delete()
+#         return Response(status=204)
+#     else:
+#         return Response(status=404, data={"message": "given post not found"})
+    
+
+
+@api_view(['DELETE'])
+def un_like_post(request, post_id, user_id):
+    try:
+        post_like_instance = Like.objects.get(post__id=post_id, user__id=user_id)
         post_like_instance.delete()
         return Response(status=204)
-    else:
-        return Response(status=404, data={"message": "given post not found"})
-    
+    except Like.DoesNotExist:
+        return Response(status=404)
 
 class PostLikeView(ListCreateAPIView):
     serializer_class = LikeSerializer
     def get_queryset(self):
+
+        user_id=self.kwargs.get("user_id")
         post_id = self.kwargs.get("post_id")
-        return Like.objects.filter(post__id=post_id)
+
+        return Like.objects.filter(post__id=post_id,user__id=user_id)

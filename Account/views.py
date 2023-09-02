@@ -1,3 +1,4 @@
+from celery import shared_task
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -17,6 +18,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serilizer import UserProfileSerializer, AccountSerilizer,OccupationSerilizer,CategorySerilizer,UserSerializer
 from .models import User, Address, Category, Occupation
+from celery.utils.log import get_task_logger
+from datetime import datetime, timedelta
 
 
 from .models import *
@@ -90,8 +93,50 @@ class RegisterView(APIView):
         
         return Response({'msg':'Registration Failed'})
 
+
+
+# @shared_task
+# def send_registration_email(request,email):
+#     print(request,'rerquetllnnln>>>>>>>.')
+#     user = User.objects.get(email=email)
+#     current_site = get_current_site(request)
+#     mail_subject = 'Please activate your account'
+
+#     message = render_to_string('account_verify_email.html', {
+#         'user': user,
+#         'domain': current_site,
+#         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+#         'token': default_token_generator.make_token(user),
+#         'username': urlsafe_base64_encode(force_bytes(user.username))
+#     })
+#     to_email = email
+#     send_email = EmailMessage(mail_subject, message, to=[to_email])
+#     send_email.send()
+
+
+   
+
+
+# class RegisterView(APIView):
+#     def post(self, request):
+#         email = request.data.get('email')
+#         serializer = UserRegister(data=request.data)
+
+#         if serializer.is_valid(raise_exception=True):
+#             user = serializer.save()
+#             print(user,'user')
+
+         
+#             send_registration_email.delay(request,email)
+
+#             return Response({'msg': 'Registration Success'})
+
+#         return Response({'msg': 'Registration Failed'})
+
            
-#for activating user  and directing to login page  
+#for activating user  and directing to login page 
+
+
 @api_view(['GET'])
 def Activate(request,uidb64,token):
     try:
@@ -104,8 +149,26 @@ def Activate(request,uidb64,token):
         user.is_active = True
         user.save()
         print('saved')
+    
+        delete_activation_link.apply_async(args=[user.id], countdown=60)
 
         return HttpResponseRedirect('http://localhost:3000/login')
+
+
+@shared_task
+def delete_activation_link(user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+        token_validity_period = timedelta(minutes=1) 
+        activation_time = user.date_joined
+        if datetime.now() - activation_time > token_validity_period:
+            return  
+
+        user.is_active = False
+        user.save()
+        print('Activation link deleted successfully')
+    except User.DoesNotExist:
+        print('User not found')
 
 
 
@@ -160,7 +223,7 @@ class GoogleAuthentication(APIView):
                 'status': 200,
                 'user': {
                     'user_id': user.id,
-                    'email': user.email,
+                    'email': user.email,    
                     'is_active': user.is_active,
                    
                 },
@@ -257,7 +320,11 @@ class BlockUser(APIView):
             print(user,'user')
             user.is_active=not user.is_active
             user.save()
-            return Response({'msg':"Blocked successfully"})
+            if user.is_active:
+                message = 'User unblocked!'
+            else:
+                message = 'Blocked successfully'
+            return Response({'msg': message})
         except user.DoesNotExist:
             return Response({'msg':"User not found"})
         except Exception as e:
@@ -368,7 +435,8 @@ class userProfileSet2(ListCreateAPIView):
 
 @api_view(['POST'])
 def get_new_token(request):
-    email = request.data.get('email')
+    email= request.data.get('email')
+ 
     user = User.objects.get(email=email)
     token = create_jwt_pair_tokens(user)
     return Response(status=200,data={'token':token})

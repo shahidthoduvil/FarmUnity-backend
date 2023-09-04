@@ -187,7 +187,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         
 
 
-        return token
+     
     
 # generate a token
 

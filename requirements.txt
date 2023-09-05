@@ -12,3 +12,5 @@ redis
 requests
 pillow
 django-cloudinary-storage
+celery
+django-celery-beat

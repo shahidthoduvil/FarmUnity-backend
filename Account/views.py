@@ -150,25 +150,25 @@ def Activate(request,uidb64,token):
         user.save()
         print('saved')
     
-        delete_activation_link.apply_async(args=[user.id], countdown=60)
+        # delete_activation_link.apply_async(args=[user.id], countdown=60)
 
-        return HttpResponseRedirect('http://localhost:3000/login')
+        return HttpResponseRedirect('https://farmcommunity.netlify.app/login')
 
 
-@shared_task
-def delete_activation_link(user_id):
-    try:
-        user = User.objects.get(pk=user_id)
-        token_validity_period = timedelta(minutes=1) 
-        activation_time = user.date_joined
-        if datetime.now() - activation_time > token_validity_period:
-            return  
+# @shared_task
+# def delete_activation_link(user_id):
+#     try:
+#         user = User.objects.get(pk=user_id)
+#         token_validity_period = timedelta(minutes=1) 
+#         activation_time = user.date_joined
+#         if datetime.now() - activation_time > token_validity_period:
+#             return  
 
-        user.is_active = False
-        user.save()
-        print('Activation link deleted successfully')
-    except User.DoesNotExist:
-        print('User not found')
+#         user.is_active = False
+#         user.save()
+#         print('Activation link deleted successfully')
+#     except User.DoesNotExist:
+#         print('User not found')
 
 
 

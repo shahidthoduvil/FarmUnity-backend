@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     'images.apps.ImagesConfig',
+    'cloudinary_storage',
+    'cloudinary',
     'Account',
     'rest_framework',
     'corsheaders',
@@ -215,6 +218,7 @@ STATIC_URL = 'static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 AUTH_USER_MODEL='Account.User'
 
@@ -247,3 +251,9 @@ CELERY_RESULT_SERIALIZER='json'
 CELERY_TASK_SERIALIZER='json'
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('cloud_name'),
+    'API_KEY': config('api_key'),
+    'API_SECRET':config('api_secret'),
+}

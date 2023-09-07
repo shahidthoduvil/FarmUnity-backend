@@ -15,6 +15,9 @@ urlpatterns = [
     path('send-notifications/',AdminNotificationCreateView.as_view()),
     path('delete-notification/<int:id>/', DeleteNotificationAPIView.as_view()),
     path("user-previous-chats/<int:user1>/<int:user2>/", PreviousMessagesView.as_view()),
+    path('cached-news/', CachedNewsListView.as_view(), name='cached-news-list'),
+    path('fetch-initial-news/', FetchAndStoreInitialNews.as_view(), name='fetch-initial-news'),
+
 
 
 ]

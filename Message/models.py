@@ -46,3 +46,12 @@ class Messages(models.Model):
 
 
 
+class News(models.Model):
+    author=models.CharField(max_length=1000,null=True)
+    title = models.CharField(max_length=1000,null=True)
+    description = models.TextField(null=True)
+    url = models.URLField(max_length=1000,null=True)
+    url_to_image = models.URLField(max_length=1000,null=True)
+
+    def __str__(self):
+        return self.author

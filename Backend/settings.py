@@ -257,3 +257,6 @@ CLOUDINARY_STORAGE = {
     'API_KEY': config('api_key'),
     'API_SECRET':config('api_secret'),
 }
+
+
+API_KEY = config('API_KEY')

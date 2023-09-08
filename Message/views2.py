@@ -33,7 +33,7 @@ class FetchAndStoreInitialNews(APIView):
         try:
          
             api_key = settings.API_KEY
-            api_url = f'https://newsapi.org/v2/everything?q=agriculture&from=2023-08-07&sortBy=publishedAt&apiKey=19d5548ec7ab4ba79877be8d65d688e3={api_key}'
+            api_url = f'https://newsapi.org/v2/everything?q=agriculture&apikey={api_key}'
             response = requests.get(api_url)
             print(response)
             news_data = response.json().get('articles', [])

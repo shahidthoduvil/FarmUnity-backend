@@ -6,6 +6,6 @@ from .models import *
 admin.site.register(Question)
 admin.site.register(Solution)
 admin.site.register(Notification)
-
+admin.site.register(News)
 
 

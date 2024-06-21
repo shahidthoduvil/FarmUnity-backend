@@ -152,7 +152,7 @@ def Activate(request,uidb64,token):
     
         # delete_activation_link.apply_async(args=[user.id], countdown=60)
 
-        return HttpResponseRedirect('https://farmcommunity.netlify.app/login')
+        return HttpResponseRedirect('https://farmcommunity.vercel.app/login')
 
 
 # @shared_task
@@ -269,7 +269,7 @@ def ResetPassword_validate(request, uidb64, token):
         user = None
     if user is not None and default_token_generator.check_token(user,token):
         request.session['uid']=uid
-        return HttpResponseRedirect('https://farmcommunity.netlify.app/reset-password')
+        return HttpResponseRedirect('https://farmcommunity.vercel.app/reset-password')
     else:
         return Response({'message':'Forgot password mail sented Success'}) 
 
@@ -293,7 +293,7 @@ class ResetPasswordView(APIView):
         else:
             
 
-            return HttpResponseRedirect('https://farmcommunity.netlify.app/reset-password')
+            return HttpResponseRedirect('https://farmcommunity.vercel.app/reset-password')
         
 
 class ListUserview(ListAPIView):

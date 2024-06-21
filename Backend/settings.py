@@ -40,7 +40,6 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "daphne",
-    "django_celery_beat",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -16,11 +16,11 @@ User = get_user_model()
 
 class UserByCategoryView(APIView):
     permission_classes = [IsAuthenticatedWithToken]
-    pagination_class = PageNumberPagination
+ 
 
     def get(self, request, categoryName):
         try:
-            users = User.objects.filter(Occup__Cat__Category_name=categoryName).exclude(id=request.user.id)
+            users = User.objects.filter(Occup__Cat__Category_name=categoryName)
             
             serializer = UserSerializer(users, many=True)
             return Response(serializer.data)

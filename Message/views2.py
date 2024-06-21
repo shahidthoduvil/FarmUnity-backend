@@ -36,8 +36,8 @@ class FetchAndStoreInitialNews(APIView):
             api_url = f'https://newsapi.org/v2/everything?q=agriculture&apikey={api_key}'
             response = requests.get(api_url)
             print(response)
-            news_data = response.json().get('articles', [])
-
+            news_data = response.json().get('articles',[])
+            
             if not news_data:
                 print("API response does not contain news data. Skipping addition.")
                 return Response({'message': 'API response does not contain news data.'})

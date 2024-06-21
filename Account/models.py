@@ -34,6 +34,8 @@ class AccountManger(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get('is_admin') is not True:
+            raise ValueError('Superuser must have is_admin=True.')
 
         return self._create_user(email, password, **extra_fields)
 
@@ -94,7 +96,7 @@ class User(AbstractBaseUser):
         return self.email 
     
     def has_perm(self,pars,obj=None):
-        return self.is_admin
+        return self.is_superuser
     
     def has_module_perms(self,add_label):
         return True

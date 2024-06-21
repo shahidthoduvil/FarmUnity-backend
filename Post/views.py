@@ -52,7 +52,7 @@ class PostListCreateAPIView(ListCreateAPIView):
         print()
         print('start')
         print(self.kwargs,'kwargs>>>>>>>>>')
-        print()
+
         return Post.objects.all().order_by('-date')
     
 

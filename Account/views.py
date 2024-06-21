@@ -1,4 +1,4 @@
-from celery import shared_task
+# from celery import shared_task
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -18,8 +18,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serilizer import UserProfileSerializer, AccountSerilizer,OccupationSerilizer,CategorySerilizer,UserSerializer
 from .models import User, Address, Category, Occupation
-from celery.utils.log import get_task_logger
-from datetime import datetime, timedelta
+# from celery.utils.log import get_task_logger
+# from datetime import datetime, timedelta
 
 
 from .models import *
